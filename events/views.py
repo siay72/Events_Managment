@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from events.models import Event, Participant, Category
 from django.utils import timezone
 from django.db.models import Q, Count,Sum, Max, Min, Avg
-from events.forms import EventModelForm
+from events.forms import EventModelForm, ParticipantModelForm, CategoryModelForm
 from datetime import date
 from django.conf import settings
 from django.contrib import messages
@@ -156,3 +156,28 @@ def event_detail(request, id):
 
    
     return render(request, "event_details.html", {"event": event})
+
+def add_participant(request):
+    if request.method == 'POST':
+        form = ParticipantModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Participant added successfully!")
+            return redirect('add_participant')
+    else:
+        form = ParticipantModelForm()
+
+    return render(request, 'dashboard/add_participant.html', {'form': form})
+
+def add_category(request):
+  
+    if request.method == 'POST':
+        form = CategoryModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Category added successfully!")
+            return redirect('add_category')
+    else:
+        form = CategoryModelForm()
+
+    return render(request, 'dashboard/add_category.html', {'form': form})

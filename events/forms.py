@@ -74,7 +74,7 @@ class StyledFormMixin:
 
 
 # ---------------------------------
-# Django Model Form
+# Django Model Form for Event
 # ---------------------------------
 class EventModelForm(StyledFormMixin, forms.ModelForm):
     """Model-based Event Form with Tailwind styling."""
@@ -96,6 +96,35 @@ class EventModelForm(StyledFormMixin, forms.ModelForm):
             'time': forms.TimeInput(attrs={'type': 'time'}),
             'participants': forms.CheckboxSelectMultiple,
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.apply_styled_widgets()
+
+
+# ---------------------------------
+# Django Model Form for Participant
+# ---------------------------------
+class ParticipantModelForm(StyledFormMixin, forms.ModelForm):
+    """Model-based Participant Form with Tailwind styling."""
+
+    class Meta:
+        model = Participant
+        fields = ['name', 'email']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.apply_styled_widgets()
+
+# ---------------------------------
+# Django Model Form for Category
+# ---------------------------------
+class CategoryModelForm(StyledFormMixin, forms.ModelForm):
+    """Model-based Category Form with Tailwind styling."""
+
+    class Meta:
+        model = Category
+        fields = ['name', 'description']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
