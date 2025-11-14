@@ -6,11 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Eventify{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+    </style>
   </head>
-
-  <body class="bg-gray-50 text-gray-800">
+    <body class="font-sans bg-gray-100">
+    <header class="bg-white shadow-md">
+        {% if request.user.is_authenticated %}
+            {% include "logged_nav.html" %}
+        
+        {% else %}
+            {% include "no_logged_nav.html" %}
+        {% endif %}
+    </header>
   
-  <nav class="bg-white shadow-md sticky top-0 z-50">
+  {% comment %} <nav class="bg-white shadow-md sticky top-0 z-50">
     <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
       
       <!-- Logo -->
@@ -25,7 +37,8 @@
         <a href="{% url 'dashboard' %}" class="hover:text-blue-600">Dashboard</a>
         <a href="#" class="hover:text-blue-600">About Us</a>
         <a href="#" class="hover:text-blue-600">All Events</a>
-        <a href="#" class="hover:text-blue-600">Contact Us</a>
+        <a href="{% url 'sign-in' %}" class="hover:text-blue-600">Sign In</a>
+        <a href="{% url 'sign-up' %}" class="hover:text-blue-600">Sign Up</a>
       </div>
 
       <!-- Mobile Hamburger -->
@@ -43,9 +56,10 @@
       <a href="{% url 'dashboard' %}" class="block px-4 py-2 hover:bg-blue-50">Dashboard</a>
       <a href="#" class="block px-4 py-2 hover:bg-blue-50">About Us</a>
       <a href="#" class="block px-4 py-2 hover:bg-blue-50">All Events</a>
-      <a href="#" class="block px-4 py-2 hover:bg-blue-50">Contact Us</a>
+      <a href="{% url 'sign-in' %}" class="hover:text-blue-600">Sign In</a>
+      <a href="{% url 'sign-up' %}" class="hover:text-blue-600">Sign Up</a>
     </div>
-  </nav>
+  </nav> {% endcomment %}
 
 
 

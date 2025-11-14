@@ -19,8 +19,11 @@ from django.urls import path, include
 from debug_toolbar.toolbar import debug_toolbar_urls
 from django.views.generic import RedirectView
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('events/', include('events.urls')),
-    path('', RedirectView.as_view(url='/events/home/', permanent=False))
+    path('users/', include("users.urls")),
+    path('', RedirectView.as_view(url='/events/home/', permanent=False)),
+    
 ]+ debug_toolbar_urls()
