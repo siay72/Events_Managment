@@ -41,10 +41,10 @@
             {% for participant in event.participants.all %}
             <li class="bg-gray-100 p-3 rounded-lg flex items-center gap-3">
               <div class="bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold">
-                {{ participant.name|slice:":1" }}
+                {{ participant.first_name|slice:":1" }}
               </div>
               <div>
-                <p class="font-medium text-gray-800">{{ participant.name }}</p>
+                <p class="font-medium text-gray-800">{{ participant.first_name }} {{ participant.last_name }}</p>
                 <p class="text-sm text-gray-500">{{ participant.email }}</p>
               </div>
             </li>

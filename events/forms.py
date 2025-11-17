@@ -1,5 +1,5 @@
 from django import forms
-from events.models import Event, Category, Participant
+from events.models import Event, Category
 
 
 # ---------------------------------
@@ -106,19 +106,21 @@ class EventModelForm(StyledFormMixin, forms.ModelForm):
         self.apply_styled_widgets()
 
 
-# ---------------------------------
-# Django Model Form for Participant
-# ---------------------------------
-class ParticipantModelForm(StyledFormMixin, forms.ModelForm):
-    """Model-based Participant Form with Tailwind styling."""
+# # ---------------------------------
+# # Django Model Form for Participant
+# # ---------------------------------
+# class ParticipantModelForm(StyledFormMixin, forms.ModelForm):
+#     """Model-based Participant Form with Tailwind styling."""
 
-    class Meta:
-        model = Participant
-        fields = ['name', 'email']
+#     class Meta:
+#         model = 
+#         fields = ['name', 'email']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_styled_widgets()
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.apply_styled_widgets()
+
+
 
 # ---------------------------------
 # Django Model Form for Category

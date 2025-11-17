@@ -14,10 +14,14 @@
             {{ form }}
             <div class="flex justify-center mt-6">
                     <button class="bg-blue-500 px-4 py-2 rounded text-white font-medium hover:bg-blue-700 transition" type="submit">
-                        Sign Up
+                        Sign In
                     </button>
+                    
+
             </div>
         </form>
+        <p  class="block mt-4">If you have no Account Please </p>
+        <a href="{% url 'sign-up' %}" class="hover:text-blue-600 text-white items-center">Sign Up</a>
     </div>
 
 {% endblock content %}

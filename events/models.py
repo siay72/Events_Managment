@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
 
 class Category(models.Model):
     name = models.CharField(max_length=120, unique=True)
@@ -9,12 +10,6 @@ class Category(models.Model):
         return self.name
 
 
-class Participant(models.Model):
-    name = models.CharField(max_length=120)
-    email = models.EmailField(unique=True)
-
-    def __str__(self):
-        return self.name
 
 
 class Event(models.Model):
@@ -24,8 +19,12 @@ class Event(models.Model):
     time = models.TimeField()
     location = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="events")
-    participants = models.ManyToManyField(Participant, related_name="events", blank=True)
-
+    # participants = models.ManyToManyField(Participant, related_name="events", blank=True)
+    participants = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="rsvp_events",
+        blank=True
+    )
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 

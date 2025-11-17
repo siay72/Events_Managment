@@ -12,8 +12,8 @@
       }
     </style>
   </head>
-    <body class="font-sans bg-gray-100">
-    <header class="bg-white shadow-md">
+    <body class="font-sans bg-gray-500 ">
+    <header class="bg-blue-200 shadow-md sticky">
         {% if request.user.is_authenticated %}
             {% include "logged_nav.html" %}
         
@@ -22,47 +22,7 @@
         {% endif %}
     </header>
   
-  {% comment %} <nav class="bg-white shadow-md sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
-      
-      <!-- Logo -->
-      <div class="flex items-center space-x-2">
-        <img src="{% static 'images/logo.jpeg' %}" alt="Logo" class="w-8 h-8">
-        <h1 class="text-2xl font-bold text-blue-600">Eventify</h1>
-      </div>
-
-      <!-- Desktop Links -->
-      <div class="hidden md:flex space-x-8 font-extrabold">
-        <a href="{% url 'home' %}" class="hover:text-blue-600">Home</a>
-        <a href="{% url 'dashboard' %}" class="hover:text-blue-600">Dashboard</a>
-        <a href="#" class="hover:text-blue-600">About Us</a>
-        <a href="#" class="hover:text-blue-600">All Events</a>
-        <a href="{% url 'sign-in' %}" class="hover:text-blue-600">Sign In</a>
-        <a href="{% url 'sign-up' %}" class="hover:text-blue-600">Sign Up</a>
-      </div>
-
-      <!-- Mobile Hamburger -->
-      <button id="menu-btn" class="md:hidden text-gray-700 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none"
-             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Mobile Dropdown -->
-    <div id="mobile-menu" class="hidden flex-col md:hidden bg-white border-t border-gray-200">
-      <a href="{% url 'home' %}" class="block px-4 py-2 hover:bg-blue-50">Home</a>
-      <a href="{% url 'dashboard' %}" class="block px-4 py-2 hover:bg-blue-50">Dashboard</a>
-      <a href="#" class="block px-4 py-2 hover:bg-blue-50">About Us</a>
-      <a href="#" class="block px-4 py-2 hover:bg-blue-50">All Events</a>
-      <a href="{% url 'sign-in' %}" class="hover:text-blue-600">Sign In</a>
-      <a href="{% url 'sign-up' %}" class="hover:text-blue-600">Sign Up</a>
-    </div>
-  </nav> {% endcomment %}
-
-
-
+  
 
     <!-- Content -->
     <main>
@@ -74,7 +34,7 @@
 
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 py-10 mt-10">
+    <footer class="bg-gray-900 text-gray-300 py-10 mt-10 rounded-lg">
       <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-8 px-6">
         <div>
           <h4 class="text-lg font-semibold mb-4">About Eventify</h4>
@@ -83,7 +43,7 @@
         <div>
           <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
           <ul class="space-y-2 text-sm">
-            <li><a href="#" class="hover:text-blue-400">Home</a></li>
+            <li><a href="{% url 'home' %}" class="hover:text-blue-400">Home</a></li>
             <li><a href="#" class="hover:text-blue-400">All Events</a></li>
             <li><a href="#" class="hover:text-blue-400">Contact</a></li>
           </ul>

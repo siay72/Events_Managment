@@ -1,13 +1,29 @@
 from django.shortcuts import render, redirect
-from events.models import Event, Participant, Category
+from events.models import Event, Category
 from django.utils import timezone
-from django.db.models import Q, Count,Sum, Max, Min, Avg
-from events.forms import EventModelForm, ParticipantModelForm, CategoryModelForm
+from django.db.models import Q, Count,Sum
+from events.forms import EventModelForm, CategoryModelForm
 from datetime import date
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+User = get_user_model()
 
-# Create your views here.
+
+def is_admin(user):
+    return user.groups.filter(name='admin').exists()
+
+def is_organizer(user):
+    return user.groups.filter(name='Organizer').exists()
+
+def is_participant(user):
+    return user.groups.filter(name='Participant').exists()
+
+
+def is_organizer_or_admin(user):
+    return user.is_superuser or user.groups.filter(name='Organizer').exists()
+
 def home(request):
     query = request.GET.get('q', '').strip()  #
     events = Event.objects.all()
@@ -24,7 +40,7 @@ def home(request):
     return render(request, 'home.html', context)
 
 
-
+@login_required
 def dashboard(request):
     now = timezone.localtime()
     today = now.date()
@@ -68,7 +84,7 @@ def dashboard(request):
         total_participants_all_events_sum=Sum("num_participants")
     )
 
-    total_participants_distinct = Participant.objects.count()
+    total_participants_distinct = User.objects.count()
     upcoming_events_count = base_qs.filter(upcoming_filter).count()
     past_events_count = base_qs.filter(past_filter).count()
 
@@ -91,7 +107,8 @@ def dashboard(request):
 
 
 
-
+@login_required
+@permission_required("events.add_event", login_url='no_permission')
 def create_event(request):
     event_form = EventModelForm()
 
@@ -110,6 +127,10 @@ def create_event(request):
 
     return render(request, "dashboard/event_form.html", context)
 
+
+
+@login_required
+@permission_required("events.change_event", login_url='no_permission')
 def update_event(request, id):
     event = Event.objects.get(id=id)
     event_form = EventModelForm(instance=event)
@@ -130,6 +151,11 @@ def update_event(request, id):
     }
     return render(request, "dashboard/event_form.html",context)
 
+
+
+
+@login_required
+@permission_required("events.delete_event", login_url='no_permission')
 def delete_event(request, id):
     if request.method == "POST":
         try:
@@ -144,6 +170,9 @@ def delete_event(request, id):
         return redirect('dashboard')
     
 
+
+
+@login_required
 def event_detail(request, id):
     
     event = (
@@ -157,18 +186,23 @@ def event_detail(request, id):
    
     return render(request, "event_details.html", {"event": event})
 
-def add_participant(request):
-    if request.method == 'POST':
-        form = ParticipantModelForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Participant added successfully!")
-            return redirect('add_participant')
-    else:
-        form = ParticipantModelForm()
+# def add_participant(request):
+#     if request.method == 'POST':
+#         form = ParticipantModelForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, "Participant added successfully!")
+#             return redirect('add_participant')
+#     else:
+#         form = ParticipantModelForm()
 
-    return render(request, 'dashboard/add_participant.html', {'form': form})
+#     return render(request, 'dashboard/add_participant.html', {'form': form})
 
+
+
+
+@login_required
+@permission_required("events.add_category", login_url='no_permission')
 def add_category(request):
   
     if request.method == 'POST':
@@ -181,3 +215,6 @@ def add_category(request):
         form = CategoryModelForm()
 
     return render(request, 'dashboard/add_category.html', {'form': form})
+
+
+
