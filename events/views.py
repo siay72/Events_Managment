@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from events.models import Event, Category
 from django.utils import timezone
 from django.db.models import Q, Count,Sum
@@ -7,6 +7,7 @@ from datetime import date
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 User = get_user_model()
 
@@ -23,6 +24,19 @@ def is_participant(user):
 
 def is_organizer_or_admin(user):
     return user.is_superuser or user.groups.filter(name='Organizer').exists()
+
+
+@login_required
+def dashboard(request):
+    if is_organizer(request.user):
+        return redirect('manager-dashboard')
+    elif is_participant(request.user):
+        return redirect('user-dashboard')
+    return redirect('no-permission')
+
+
+
+
 
 def home(request):
     query = request.GET.get('q', '').strip()  #
@@ -174,7 +188,6 @@ def delete_event(request, id):
 
 @login_required
 def event_detail(request, id):
-    
     event = (
         Event.objects
         .select_related("category")
@@ -183,20 +196,61 @@ def event_detail(request, id):
         .first()
     )
 
-   
-    return render(request, "event_details.html", {"event": event})
+    if not event:
+        messages.error(request, "Event not found.")
+        return redirect("user-dashboard")
 
-# def add_participant(request):
-#     if request.method == 'POST':
-#         form = ParticipantModelForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, "Participant added successfully!")
-#             return redirect('add_participant')
-#     else:
-#         form = ParticipantModelForm()
+    user_rsvp = event.participants.filter(id=request.user.id).exists()
 
-#     return render(request, 'dashboard/add_participant.html', {'form': form})
+
+    if request.method == "POST":
+        action = request.POST.get("action", "").strip().lower()
+
+        # RSVP
+        if action == "rsvp":
+            if user_rsvp:
+                messages.warning(request, "You have already RSVP to this event.")
+                return redirect("event-detail", id=event.id)
+
+            event.participants.add(request.user)
+
+            # Email
+            if request.user.email:
+                send_mail(
+                    subject=f"RSVP Confirmation — {event.name}",
+                    message=(
+                        f"Hi {request.user.get_full_name() or request.user.username},\n\n"
+                        f"You successfully RSVP for {event.name}.\n"
+                        f"Date: {event.date}\nTime: {event.time}\nLocation: {event.location}\n"
+                        "Best of Luck."
+                    ),
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[request.user.email],
+                    fail_silently=True,
+                )
+
+            messages.success(request, "RSVP successful!")
+            return redirect("event-detail", id=event.id)
+
+        # CANCEL RSVP
+        elif action == "cancel":
+            if not user_rsvp:
+                messages.warning(request, "You are not RSVP to this event.")
+                return redirect("event-detail", id=event.id)
+
+            event.participants.remove(request.user)
+            messages.success(request, "Your RSVP has been cancelled.")
+            return redirect("event-detail", id=event.id)
+
+        else:
+            messages.error(request, "Invalid action.")
+            return redirect("event-detail", id=event.id)
+
+
+    return render(request, "event_details.html", {
+        "event": event,
+        "user_rsvp": user_rsvp,
+    })
 
 
 
@@ -215,6 +269,10 @@ def add_category(request):
         form = CategoryModelForm()
 
     return render(request, 'dashboard/add_category.html', {'form': form})
+
+
+
+
 
 
 

@@ -4,13 +4,19 @@
       
       <!-- Logo -->
       <div class="flex items-center space-x-2">
-        <img src="{% static 'images/logo.jpeg' %}" alt="Logo" class="w-8 h-8">
+        <img src="{% static 'images/logo.jpeg' %}" alt="Logo" class="w-8 h-8 mt-5">
         <h1 class="text-2xl font-bold text-blue-600">Eventify</h1>
       </div>
 
       <!-- Desktop Links -->
       <div class="hidden md:flex space-x-8 font-extrabold">
         <a href="{% url 'home' %}" class="hover:text-blue-600">Home</a>
+        {% if request.user.is_superuser %}
+        <a href="{% url 'admin-dashboard' %}" class="hover:text-blue-600">Admin Dashboard</a>
+        {% endif %}
+        {% if request.user.is_superuser %}
+        <a href="{% url 'organizer-dashboard' %}" class="hover:text-blue-600">Organizer Dashboard</a>
+        {% endif %}
         <a href="{% url 'dashboard' %}" class="hover:text-blue-600">Dashboard</a>
         <a href="#" class="hover:text-blue-600">About Us</a>
         <a href="#" class="hover:text-blue-600">All Events</a>
@@ -35,6 +41,9 @@
     <!-- Mobile Dropdown -->
     <div id="mobile-menu" class="hidden flex-col md:hidden bg-white border-t border-gray-200">
       <a href="{% url 'home' %}" class="block px-4 py-2 hover:bg-blue-50">Home</a>
+      {% if request.user.is_superuser %}
+      <a href="{% url 'dashboard' %}" class="block px-4 py-2 hover:bg-blue-50">Admin Dashboard</a>
+      {% endif %}
       <a href="{% url 'dashboard' %}" class="block px-4 py-2 hover:bg-blue-50">Dashboard</a>
       <a href="#" class="block px-4 py-2 hover:bg-blue-50">About Us</a>
       <a href="#" class="block px-4 py-2 hover:bg-blue-50">All Events</a>

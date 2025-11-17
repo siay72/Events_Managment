@@ -6,6 +6,8 @@ from django.contrib.auth.models import  Group
 from django.db.models import Prefetch
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.utils import timezone
+
 User = get_user_model()
 
 
@@ -19,6 +21,9 @@ def is_participant(user):
     return user.groups.filter(name='Participant').exists()
 
 '''User Register'''
+
+
+
 
 
 def sign_up(request):
@@ -202,3 +207,59 @@ def show_groups(request):
 
 def no_permission(request):
     return render(request, 'no_permission.html')
+
+
+
+
+
+@login_required
+def participant_dashboard(request):
+    return render(request, "users/participant_dashboard.html",)
+
+
+
+# Users Dashboard
+
+
+@login_required
+def user_dashboard(request):
+    user = request.user
+
+    today = timezone.localdate()
+    now = timezone.now().time()
+
+    # Events user RSVP to
+    rsvp_events = user.rsvp_events.all()
+
+   
+    counts = {
+        "total_rsvp": rsvp_events.count(),
+        "upcoming_rsvp": rsvp_events.filter(date__gt=today).count()
+                           + rsvp_events.filter(date=today, time__gte=now).count(),
+        "past_rsvp": rsvp_events.filter(date__lt=today).count()
+                       + rsvp_events.filter(date=today, time__lt=now).count(),
+        "today_rsvp": rsvp_events.filter(date=today).count(),
+    }
+
+    # Filter by URL query (all | upcoming | past)
+    list_type = request.GET.get("type", "all")
+
+    if list_type == "upcoming":
+        events = rsvp_events.filter(date__gt=today) | rsvp_events.filter(date=today, time__gte=now)
+    elif list_type == "past":
+        events = rsvp_events.filter(date__lt=today) | rsvp_events.filter(date=today, time__lt=now)
+    else:
+        events = rsvp_events
+
+    events = events.order_by("date", "time")
+
+    # Today's events
+    todays_events = rsvp_events.filter(date=today).order_by("time")
+
+    return render(request, "users/user_dashboard.html", {
+        "counts": counts,
+        "events": events,
+        "list_type": list_type,
+        "todays_events": todays_events,
+    })
+
