@@ -26,7 +26,7 @@
   <!-- Stats Grid -->
   <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
     <!-- Total Events -->
-    <a href="{% url 'dashboard' %}?type=all">
+    <a href="{% url 'organizer-dashboard' %}?type=all">
       <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition">
         <h3 class="text-sm font-medium text-gray-500 mb-2">TOTAL EVENTS</h3>
         <div class="flex justify-between items-start">
@@ -46,7 +46,7 @@
     </a>
 
     <!-- Upcoming Events -->
-    <a href="{% url 'dashboard' %}?type=upcoming">
+    <a href="{% url 'organizer-dashboard' %}?type=upcoming">
       <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition">
         <h3 class="text-sm font-medium text-gray-500 mb-2">UPCOMING EVENTS</h3>
         <div class="flex justify-between items-start">
@@ -66,7 +66,7 @@
     </a>
 
     <!-- Past Events -->
-    <a href="{% url 'dashboard' %}?type=past">
+    <a href="{% url 'organizer-dashboard' %}?type=past">
       <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition">
         <h3 class="text-sm font-medium text-gray-500 mb-2">PAST EVENTS</h3>
         <div class="flex justify-between items-start">

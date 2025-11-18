@@ -4,11 +4,14 @@
 
 {% block content %}
 <div class="container mx-auto px-6 py-8">
-  {% for message in messages %}
-    <div class="mb-3 px-4 py-2 rounded {{ message.tags|default:'bg-green-500 text-white' }}">
-      {{ message }}
-    </div>
-  {% endfor %}
+{% for message in messages %}
+      <div class="mb-3 px-4 py-2 rounded 
+          {% if message.tags == 'success' %}bg-green-500 text-white
+          {% elif message.tags == 'error' %}bg-red-500 text-white
+          {% else %}bg-blue-500 text-white{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
 
   <h1 class="text-3xl font-bold mb-4">Admin Dashboard</h1>
 
