@@ -3,7 +3,7 @@
 {% block title %}{{ event.name }} | Event Details{% endblock %}
 
 {% block content %}
-<section class="py-12 bg-gray-50">
+<section class="bg-gray-500 p-6">
   <div class="max-w-5xl mx-auto px-6">
 
       <div>
@@ -20,9 +20,9 @@
     {% if event %}
     <!-- Main Event Card -->
     <div class="bg-white rounded-xl shadow-md overflow-hidden">
-      <img src="{% static 'images/default.jpeg' %}" 
-           alt="{{ event.name }}" 
-           class="w-full sm:w-1/2 h-64 object-cover rounded-t-lg mx-auto sm:rounded-lg shadow-md mb-6 mt-4">
+      <img src="{{ event.asset.url }}"
+     alt="{{ event.name }}"
+     class="w-full sm:w-1/2 h-64 object-cover rounded-t-lg mx-auto sm:rounded-lg shadow-md mb-6 mt-4">
 
       <div class="p-8">
         <!-- Event Title -->
@@ -92,6 +92,8 @@
                       {% endif %}
                     </p>
                     <p class="text-sm text-gray-500">{{ participant.email }}</p>
+                    <p class="text-sm text-gray-500">{{participant.groups.first.name | default:"No Role"}}</p>
+
                   </div>
                 </li>
               {% endfor %}

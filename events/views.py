@@ -29,7 +29,7 @@ def is_organizer_or_admin(user):
 @login_required
 def dashboard(request):
     if is_organizer(request.user):
-        return redirect('manager-dashboard')
+        return redirect('organizer-dashboard')
     elif is_participant(request.user):
         return redirect('user-dashboard')
     return redirect('no-permission')
@@ -55,7 +55,8 @@ def home(request):
 
 
 @login_required
-def dashboard(request):
+@user_passes_test(is_organizer_or_admin,login_url=('no_permission'))
+def organizer_dashboard(request):
     now = timezone.localtime()
     today = now.date()
     now_time = now.time()
@@ -127,7 +128,7 @@ def create_event(request):
     event_form = EventModelForm()
 
     if request.method == "POST":
-        event_form = EventModelForm(request.POST)
+        event_form = EventModelForm(request.POST,request.FILES )
 
         if event_form.is_valid():
             event_form.save()
@@ -150,7 +151,7 @@ def update_event(request, id):
     event_form = EventModelForm(instance=event)
 
     if request.method == "POST":
-        event_form = EventModelForm(request.POST, instance=event)
+        event_form = EventModelForm(request.POST, request.FILES, instance=event)
         if event_form.is_valid():
             event_form.save()
             messages.success(request, "Event Updated Successfully")
@@ -169,7 +170,6 @@ def update_event(request, id):
 
 
 @login_required
-@permission_required("events.delete_event", login_url='no_permission')
 def delete_event(request, id):
     if request.method == "POST":
         try:
@@ -211,23 +211,7 @@ def event_detail(request, id):
             if user_rsvp:
                 messages.warning(request, "You have already RSVP to this event.")
                 return redirect("event-detail", id=event.id)
-
             event.participants.add(request.user)
-
-            # Email
-            if request.user.email:
-                send_mail(
-                    subject=f"RSVP Confirmation — {event.name}",
-                    message=(
-                        f"Hi {request.user.get_full_name() or request.user.username},\n\n"
-                        f"You successfully RSVP for {event.name}.\n"
-                        f"Date: {event.date}\nTime: {event.time}\nLocation: {event.location}\n"
-                        "Best of Luck."
-                    ),
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[request.user.email],
-                    fail_silently=True,
-                )
 
             messages.success(request, "RSVP successful!")
             return redirect("event-detail", id=event.id)

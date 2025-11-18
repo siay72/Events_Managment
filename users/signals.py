@@ -1,5 +1,5 @@
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save,m2m_changed
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
@@ -45,3 +45,30 @@ def assign_role(sender, instance, created, **kwargs):
     if created:
         group, _ = Group.objects.get_or_create(name="User")
         instance.groups.add(group)
+
+
+@receiver(m2m_changed)
+def send_rsvp_confirmation_email(sender, instance, action, model, pk_set, **kwargs):
+
+    if action == "post_add" and instance.__class__.__name__ == 'Event' and model == User:
+        for user_id in pk_set:
+            try:
+                user = User.objects.get(pk=user_id)
+            except User.DoesNotExist:
+                continue
+
+            if user.email:
+                event = instance 
+
+                send_mail(
+                    subject=f"RSVP Confirmation — {event.name}",
+                    message=(
+                        f"Hi {user.get_full_name() or user.username},\n\n"
+                        f"You successfully RSVP for {event.name}.\n"
+                        f"Date: {event.date}\nTime: {event.time}\nLocation: {event.location}\n"
+                        "Best of Luck."
+                    ),
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[user.email],
+                    fail_silently=True,
+                )

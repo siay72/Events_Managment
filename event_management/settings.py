@@ -28,8 +28,12 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS =['https://*.onrender.com', 'http://127.0.0.1:8000']
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "events-managment-mgt5.onrender.com",
+]
+CSRF_TRUSTED_ORIGINS =['https://events-managment-mgt5.onrender.com', 'http://127.0.0.1:8000']
 
 AUTH_USER_MODEL= 'users.CustomUser'
 
@@ -76,6 +80,7 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
+                'events.context_processors.user_roles',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -167,4 +172,8 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 FRONTEND_URL = 'http://127.0.0.1:8000'
 
 
-LOGIN_URL = 'sign_in'
+LOGIN_URL = 'sign-in'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

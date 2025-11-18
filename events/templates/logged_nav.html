@@ -14,12 +14,15 @@
         {% if request.user.is_superuser %}
         <a href="{% url 'admin-dashboard' %}" class="hover:text-blue-600">Admin Dashboard</a>
         {% endif %}
-        {% if request.user.is_superuser %}
+        {% if is_admin %}
+        <a href="{% url 'organizer-dashboard' %}" class="hover:text-blue-600">Organizer Dashboard</a>
+        {% endif %}
+        {% if is_organizer %}
         <a href="{% url 'organizer-dashboard' %}" class="hover:text-blue-600">Organizer Dashboard</a>
         {% endif %}
         <a href="{% url 'dashboard' %}" class="hover:text-blue-600">Dashboard</a>
-        <a href="#" class="hover:text-blue-600">About Us</a>
-        <a href="#" class="hover:text-blue-600">All Events</a>
+        <a href="/events/home/#about" class="hover:text-blue-600">About Us</a>
+        <a href="/events/home/#all-events"  class="hover:text-blue-600">All Events</a>
         <a href="#" class="hover:text-blue-600">
             <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
@@ -41,12 +44,18 @@
     <!-- Mobile Dropdown -->
     <div id="mobile-menu" class="hidden flex-col md:hidden bg-white border-t border-gray-200">
       <a href="{% url 'home' %}" class="block px-4 py-2 hover:bg-blue-50">Home</a>
-      {% if request.user.is_superuser %}
-      <a href="{% url 'dashboard' %}" class="block px-4 py-2 hover:bg-blue-50">Admin Dashboard</a>
+      {% if is_admin %}
+      <a href="{% url 'admin-dashboard' %}" class="block px-4 py-2 hover:bg-blue-50">Admin Dashboard</a>
+      {% endif %}
+      {% if is_admin %}
+      <a href="{% url 'organizer-dashboard' %}" class="block px-4 py-2 hover:bg-blue-50">Organizer Dashboard</a>
+      {% endif %}
+      {% if is_organizer %}
+      <a href="{% url 'organizer-dashboard' %}" class="block px-4 py-2 hover:bg-blue-50">Organizer Dashboard</a>
       {% endif %}
       <a href="{% url 'dashboard' %}" class="block px-4 py-2 hover:bg-blue-50">Dashboard</a>
-      <a href="#" class="block px-4 py-2 hover:bg-blue-50">About Us</a>
-      <a href="#" class="block px-4 py-2 hover:bg-blue-50">All Events</a>
+      <a href="/events/home/#about" class="block px-4 py-2 hover:bg-blue-50">About Us</a>
+      <a href="/events/home/#all-events" class="block px-4 py-2 hover:bg-blue-50">All Events</a>
       <a href="#" class="block px-4 py-2 hover:bg-blue-50">
             <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}

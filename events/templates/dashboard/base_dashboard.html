@@ -18,8 +18,14 @@
         <nav class="flex items-center gap-3">
           <div class="hidden md:flex space-x-8 font-extrabold">
           <a href="{% url 'home' %}" class="px-3 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700">Home</a>
-          {% if request.user.is_superuser %}
+          {% if is_admin %}
           <a href="{% url 'admin-dashboard' %}" class="px-3 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700">Admin Dashboard</a>
+          {% endif %}
+          {% if is_admin %}
+          <a href="{% url 'organizer-dashboard' %}" class="px-3 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700">Organizer Dashboard</a>
+          {% endif %}
+          {% if is_organizer %}
+          <a href="{% url 'organizer-dashboard' %}" class="px-3 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700">Organizer Dashboard</a>
           {% endif %}
           <a href="{% url 'dashboard' %}" class="px-3 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700">Dashboard</a>
           {% comment %} <a href="{% url 'add_participant' %}" class="px-3 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700">Add Participant</a> {% endcomment %}
@@ -38,8 +44,14 @@
     <!-- Mobile Dropdown -->
     <div id="mobile-menu" class="hidden flex-col md:hidden bg-white border-t border-gray-200">
           <a href="{% url 'home' %}" class="block px-4 py-2 hover:bg-blue-50">Home</a>
-          {% if request.user.is_superuser %}
+          {% if is_admin %}
           <a href="{% url 'admin-dashboard' %}" class="block px-4 py-2 hover:bg-blue-50">Admin Dashboard</a>
+          {% endif %}
+          {% if is_admin %}
+          <a href="{% url 'organizer-dashboard' %}" class="block px-4 py-2 hover:bg-blue-50">Organizer Dashboard</a>
+          {% endif %}
+          {% if is_organizer %}
+          <a href="{% url 'organizer-dashboard' %}" class="block px-4 py-2 hover:bg-blue-50">Organizer Dashboard</a>
           {% endif %}
           <a href="{% url 'dashboard' %}" class="block px-4 py-2 hover:bg-blue-50">Dashboard</a>
           {% comment %} <a href="{% url 'add_participant' %}" class="px-3 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700">Add Participant</a> {% endcomment %}
@@ -47,9 +59,6 @@
           <a href="{% url 'create_event' %}" class="block px-4 py-2 hover:bg-blue-50">Add Event</a>
 
     </div>
-        
-        
-        
         
         
         </nav>

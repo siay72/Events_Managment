@@ -25,6 +25,12 @@ class Event(models.Model):
         related_name="rsvp_events",
         blank=True
     )
+    asset = models.ImageField(
+    upload_to='events_asset/',
+    default='events_asset/default_event.jpg',
+    blank=True,
+    null=True
+    )
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 

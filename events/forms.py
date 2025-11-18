@@ -93,6 +93,7 @@ class EventModelForm(StyledFormMixin, forms.ModelForm):
             'date',
             'time',
             'participants',
+            'asset',
         ]
         widgets = {
             'description': forms.Textarea,
