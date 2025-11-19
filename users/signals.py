@@ -68,7 +68,7 @@ def send_rsvp_confirmation_email(sender, instance, action, model, pk_set, **kwar
                         f"Date: {event.date}\nTime: {event.time}\nLocation: {event.location}\n"
                         "Best of Luck."
                     ),
-                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    from_email=settings.EMAIL_HOST_USER,
                     recipient_list=[user.email],
                     fail_silently=True,
                 )
