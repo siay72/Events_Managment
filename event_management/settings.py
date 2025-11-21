@@ -161,13 +161,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-EMAIL_BACKEND = config('EMAIL_BACKEND')
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
-EMAIL_PORT = config('EMAIL_PORT', cast=int)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_API_KEY = config("SENDGRID_API_KEY")
+SENDGRID_SANDBOX_MODE_IN_DEBUG = config(
+    "SENDGRID_SANDBOX_MODE_IN_DEBUG", default=False, cast=bool
+)
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
+
+
 
 
 FRONTEND_URL = 'https://events-managment-mgt5.onrender.com/'
