@@ -1,5 +1,5 @@
 from django.dispatch import receiver
-from django.db.models.signals import post_save,m2m_changed
+from django.db.models.signals import post_save, m2m_changed
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
@@ -9,12 +9,10 @@ from django.core.mail import send_mail
 import logging
 
 User = get_user_model()
-
 logger = logging.getLogger("django")
 
 @receiver(post_save, sender=User)
 def send_activation_email(sender, instance, created, **kwargs):
-
     if created:
         logger.warning("SIGNAL: Preparing to send activation email to %s", instance.email)
 
@@ -34,9 +32,9 @@ def send_activation_email(sender, instance, created, **kwargs):
             send_mail(
                 subject,
                 message,
-                settings.DEFAULT_FROM_EMAIL,
+                settings.DEFAULT_FROM_EMAIL,    
                 [instance.email],
-                fail_silently=False   
+                fail_silently=False,
             )
             logger.warning("SIGNAL: Email SENT to %s", instance.email)
 
@@ -46,7 +44,6 @@ def send_activation_email(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def assign_role(sender, instance, created, **kwargs):
-    
     if created:
         group, _ = Group.objects.get_or_create(name="User")
         instance.groups.add(group)
@@ -54,7 +51,6 @@ def assign_role(sender, instance, created, **kwargs):
 
 @receiver(m2m_changed)
 def send_rsvp_confirmation_email(sender, instance, action, model, pk_set, **kwargs):
-
     if action == "post_add" and instance.__class__.__name__ == 'Event' and model == User:
         for user_id in pk_set:
             try:
@@ -63,7 +59,7 @@ def send_rsvp_confirmation_email(sender, instance, action, model, pk_set, **kwar
                 continue
 
             if user.email:
-                event = instance 
+                event = instance
 
                 send_mail(
                     subject=f"RSVP Confirmation — {event.name}",
@@ -73,7 +69,7 @@ def send_rsvp_confirmation_email(sender, instance, action, model, pk_set, **kwar
                         f"Date: {event.date}\nTime: {event.time}\nLocation: {event.location}\n"
                         "Best of Luck."
                     ),
-                    from_email=settings.EMAIL_HOST_USER,
+                    from_email=settings.DEFAULT_FROM_EMAIL,   
                     recipient_list=[user.email],
                     fail_silently=True,
                 )
