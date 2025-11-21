@@ -6,16 +6,19 @@ from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
 from django.urls import reverse
 from django.core.mail import send_mail
+import logging
 
 User = get_user_model()
 
+logger = logging.getLogger("django")
 
 @receiver(post_save, sender=User)
 def send_activation_email(sender, instance, created, **kwargs):
- 
-    if created:
-        token = default_token_generator.make_token(instance)
 
+    if created:
+        logger.warning("SIGNAL: Preparing to send activation email to %s", instance.email)
+
+        token = default_token_generator.make_token(instance)
         path = reverse('activate_user', args=[instance.id, token])
         activation_url = f"{settings.FRONTEND_URL}{path}"
 
@@ -33,10 +36,12 @@ def send_activation_email(sender, instance, created, **kwargs):
                 message,
                 settings.DEFAULT_FROM_EMAIL,
                 [instance.email],
-                fail_silently=False
+                fail_silently=False   
             )
+            logger.warning("SIGNAL: Email SENT to %s", instance.email)
+
         except Exception as e:
-            print(f"Failed to send email to {instance.email}: {e}")
+            logger.error("SIGNAL: FAILED to send email to %s — ERROR: %s", instance.email, e)
 
 
 @receiver(post_save, sender=User)
