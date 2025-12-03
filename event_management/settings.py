@@ -95,11 +95,12 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://events_management_new_user:QDGNGxNVedwcI8hSrpNhP14VjBLbaiMX@dpg-d4jk0gidbo4c7386o0n0-a.oregon-postgres.render.com/events_management_new',
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
