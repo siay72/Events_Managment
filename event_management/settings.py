@@ -91,31 +91,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'event_management.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'Events_Managment',
-#         'USER': 'postgres',
-#         'PASSWORD': 'siam7272',
-#         'HOST': 'localhost',
-#         'PORT': '5432'
-#     }            
-# }
 
 
 DATABASES = {
-    'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default='postgresql://events_managment_user:20P0AjeIa592z6oPcDmjIwqxHIOIJOCA@dpg-d3u26a2li9vc73bp25ug-a.oregon-postgres.render.com/events_managment',
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
