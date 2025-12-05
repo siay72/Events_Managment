@@ -28,9 +28,9 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "events-managment-1.onrender.com",
+    "https://events-managment-2.onrender.com",
 ]
-CSRF_TRUSTED_ORIGINS =['https://events-managment-1.onrender.com', 'http://127.0.0.1:8000']
+CSRF_TRUSTED_ORIGINS =['https://events-managment-2.onrender.com', 'http://127.0.0.1:8000']
 
 AUTH_USER_MODEL= 'users.CustomUser'
 
@@ -148,7 +148,7 @@ DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
 
 
 
-FRONTEND_URL = 'https://events-managment-1.onrender.com/'
+FRONTEND_URL = 'https://events-managment-2.onrender.com'
 
 
 LOGIN_URL = 'sign-in'
